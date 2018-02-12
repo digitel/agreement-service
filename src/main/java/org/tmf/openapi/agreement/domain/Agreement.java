@@ -7,14 +7,17 @@ import java.util.Date;
 import java.util.List;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotEmpty;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import com.fasterxml.jackson.annotation.JsonFilter;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 @Document
+@JsonFilter("agreementFilter")
 public class Agreement {
 
 	@Id
@@ -33,26 +36,33 @@ public class Agreement {
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = DATE_PATTERN)
 	private Date initialDate;
 
+	@NotEmpty(message = "Name is mandatory")
 	private String name;
 
 	private String statementOfIntent;
 
 	private AgreementStatus status;
 
+	@NotEmpty(message = "Type is mandatory")
 	private String type;
 
 	private String version;
 
 	private AgreementSpecificationRef agreementSpecification;
 
+	@NotEmpty(message = "Agreement Item is mandatory")
+	@Valid
 	private List<AgreementItem> agreementItem;
 
+	@NotEmpty(message = "Engaged Party Role is mandatory")
+	@Valid
 	private List<PartyRoleRef> engagedPartyRole;
 
 	private List<AgreementAuthorization> agreementAuthorization;
 
 	private List<Characteristic> characteristic;
-
+	
+	@Valid
 	private List<AgreementRef> associatedAgreement;
 
 	@Transient

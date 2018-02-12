@@ -14,7 +14,7 @@ import javax.validation.Payload;
 
 public @interface ValidTimePeriod {
 
-	String message() default "{com.dolszewski.blog.EqualPasswords.message}";
+	String message() default "{org.tmf.openapi.agreement.validation.date.timeperiod}";
 
 	Class<?>[] groups() default {};
 
