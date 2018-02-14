@@ -29,6 +29,15 @@ public class AgreementController {
 		return ResponseEntity.created(populateHref(agreement).getHref())
 				.body(mapObjectWithExcludeFilter(agreement, null));
 	}
+	
+//	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+//	public ResponseEntity<MappingJacksonValue> getAgreement(
+//			@RequestParam MultiValueMap<String, String> requestParams, Pageable pageable) {
+//
+//		return ResponseEntity.ok(mapObjectWithExcludeFilter(populateHref(
+//				agreementService.findAgreement(buildSpecification(requestParams), pageable).getContent()),
+//				requestParams));
+//	}
 
 	private Agreement populateHref(Agreement agreement) {
 		agreement.setHref(linkTo(AgreementController.class).slash(agreement.getId()).toUri());

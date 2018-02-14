@@ -1,5 +1,7 @@
 package org.tmf.openapi.agreement.domain;
 
+import java.net.URI;
+
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -7,12 +9,14 @@ import lombok.ToString;
 @Data
 @EqualsAndHashCode(of = "id")
 @ToString(includeFieldNames = true)
-public class ProductOfferingRef {
+public class AgreementSpecificationRelationship {
 
 	private String id;
 
-	private String href;
+	private URI href;
 
-	private String name;
+	private String type;
+
+	private TimePeriod validFor;
 
 }

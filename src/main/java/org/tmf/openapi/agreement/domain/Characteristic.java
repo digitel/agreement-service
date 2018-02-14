@@ -1,24 +1,14 @@
 package org.tmf.openapi.agreement.domain;
 
+import lombok.Data;
+import lombok.ToString;
+
+@Data
+@ToString(includeFieldNames = true)
 public class Characteristic {
 
 	private String name;
-	
+
 	private String value;
 
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public String getValue() {
-		return value;
-	}
-
-	public void setValue(String value) {
-		this.value = value;
-	}
 }
