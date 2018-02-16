@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.json.MappingJacksonValue;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -34,6 +35,15 @@ public class AgreementController {
 				.body(mapObjectWithExcludeFilter(agreement, null));
 	}
 
+	@PatchMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<MappingJacksonValue> patchAgreement(@PathVariable String id, @RequestBody Agreement agreement) {
+
+		validateAgreement(id, agreement);
+		return ResponseEntity.ok(mapObjectWithExcludeFilter(
+				populateHref(agreementService.partialUpdateAgreement(agreement)), null));
+
+	}
+
 	@GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<MappingJacksonValue> getAgreement(@PathVariable String id,
 			@RequestParam MultiValueMap<String, String> requestParams) {
@@ -45,6 +55,12 @@ public class AgreementController {
 	private Agreement populateHref(Agreement agreement) {
 		agreement.setHref(linkTo(AgreementController.class).slash(agreement.getId()).toUri());
 		return agreement;
+	}
+
+	private void validateAgreement(String id, Agreement agreement) {
+		if ((null == agreement.getId()) || (null != agreement.getId() && !id.equals(agreement.getId()))) {
+			throw new IllegalArgumentException("id cannot be updated.");
+		}
 	}
 
 }

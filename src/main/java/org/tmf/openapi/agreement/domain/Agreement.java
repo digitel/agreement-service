@@ -38,7 +38,7 @@ public class Agreement {
 
 	private String description;
 
-	private long documentNumber;
+	private Long documentNumber;
 
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = DATE_PATTERN)
 	private Date initialDate;
