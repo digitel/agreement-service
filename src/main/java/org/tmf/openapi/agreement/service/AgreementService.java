@@ -3,6 +3,7 @@ package org.tmf.openapi.agreement.service;
 import java.util.Date;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -30,6 +31,10 @@ public class AgreementService {
 		}
 
 		return agreementRepository.save(agreement);
+	}
+
+	public Agreement findAgreement(@NotNull String id) {
+		return agreementRepository.findById(id).get();
 	}
 
 }

@@ -9,9 +9,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.json.MappingJacksonValue;
+import org.springframework.util.MultiValueMap;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.tmf.openapi.agreement.domain.Agreement;
 import org.tmf.openapi.agreement.service.AgreementService;
@@ -29,15 +33,14 @@ public class AgreementController {
 		return ResponseEntity.created(populateHref(agreement).getHref())
 				.body(mapObjectWithExcludeFilter(agreement, null));
 	}
-	
-//	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-//	public ResponseEntity<MappingJacksonValue> getAgreement(
-//			@RequestParam MultiValueMap<String, String> requestParams, Pageable pageable) {
-//
-//		return ResponseEntity.ok(mapObjectWithExcludeFilter(populateHref(
-//				agreementService.findAgreement(buildSpecification(requestParams), pageable).getContent()),
-//				requestParams));
-//	}
+
+	@GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<MappingJacksonValue> getAgreement(@PathVariable String id,
+			@RequestParam MultiValueMap<String, String> requestParams) {
+		return ResponseEntity
+				.ok(mapObjectWithExcludeFilter(populateHref(agreementService.findAgreement(id)), requestParams));
+
+	}
 
 	private Agreement populateHref(Agreement agreement) {
 		agreement.setHref(linkTo(AgreementController.class).slash(agreement.getId()).toUri());

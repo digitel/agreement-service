@@ -4,7 +4,6 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.Map.Entry;
 
 import org.springframework.http.converter.json.MappingJacksonValue;
 import org.springframework.util.MultiValueMap;
@@ -21,23 +20,12 @@ public class ObjectMapper {
 
 		if (null != requestParams && requestParams.size() > 0) {
 
-			// Handling for URI Like -> /api/resource/1?fields=field1,field2
 			if (requestParams.containsKey("fields")) {
 				List<String> fieldList = requestParams.get("fields");
 				for (String field : fieldList) {
 					fields.addAll(Arrays.asList(field.split(",")));
 				}
 				fields.add("id");
-			}
-
-			// Handling for URI Like -> /api/resource/1?field1,field2
-			for (Entry<String, List<String>> entry : requestParams.entrySet()) {
-				System.out.println("Key : " + entry.getKey() + " Value : " + entry.getValue());
-				if ((null == entry.getValue() || entry.getValue().isEmpty()) && (null != entry.getKey())) {
-					fields.addAll(Arrays.asList(entry.getKey().split(",")));
-					fields.add("id");
-					break;
-				}
 			}
 
 		}

@@ -5,6 +5,6 @@ import org.springframework.stereotype.Repository;
 import org.tmf.openapi.agreement.domain.Agreement;
 
 @Repository
-public interface AgreementRepository extends MongoRepository<Agreement, Long> {
+public interface AgreementRepository extends MongoRepository<Agreement, String> {
 
 }
