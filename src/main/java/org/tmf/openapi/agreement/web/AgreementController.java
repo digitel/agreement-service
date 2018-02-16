@@ -10,6 +10,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.json.MappingJacksonValue;
 import org.springframework.util.MultiValueMap;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -36,11 +37,12 @@ public class AgreementController {
 	}
 
 	@PatchMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<MappingJacksonValue> patchAgreement(@PathVariable String id, @RequestBody Agreement agreement) {
+	public ResponseEntity<MappingJacksonValue> patchAgreement(@PathVariable String id,
+			@RequestBody Agreement agreement) {
 
 		validateAgreement(id, agreement);
-		return ResponseEntity.ok(mapObjectWithExcludeFilter(
-				populateHref(agreementService.partialUpdateAgreement(agreement)), null));
+		return ResponseEntity
+				.ok(mapObjectWithExcludeFilter(populateHref(agreementService.partialUpdateAgreement(agreement)), null));
 
 	}
 
@@ -49,6 +51,13 @@ public class AgreementController {
 			@RequestParam MultiValueMap<String, String> requestParams) {
 		return ResponseEntity
 				.ok(mapObjectWithExcludeFilter(populateHref(agreementService.findAgreement(id)), requestParams));
+
+	}
+
+	@DeleteMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<MappingJacksonValue> deleteAgreement(@PathVariable String id) {
+		agreementService.deleteAgreement(id);
+		return ResponseEntity.noContent().build();
 
 	}
 

@@ -34,9 +34,15 @@ public class AgreementService {
 
 	public Agreement partialUpdateAgreement(Agreement agreement) {
 
-		Agreement existingAgreement = getExistingAgreement(agreement);
+		Agreement existingAgreement = getExistingAgreement(agreement.getId());
 		updateExistingAgreement(agreement, existingAgreement);
 		return agreementRepository.save(existingAgreement);
+	}
+
+	public void deleteAgreement(@NotNull String id) {
+
+		Agreement existingAgreement = getExistingAgreement(id);
+		agreementRepository.delete(existingAgreement);
 	}
 
 	private void setDefaultAttributes(Agreement agreement) {
@@ -49,10 +55,10 @@ public class AgreementService {
 		}
 	}
 
-	private Agreement getExistingAgreement(Agreement agreement) {
-		Optional<Agreement> existingAgreementOption = agreementRepository.findById(agreement.getId());
+	private Agreement getExistingAgreement(@NotNull String id) {
+		Optional<Agreement> existingAgreementOption = agreementRepository.findById(id);
 		if (!existingAgreementOption.isPresent()) {
-			throw new IllegalArgumentException("Agreement with id " + agreement.getId() + " doesnot exists");
+			throw new IllegalArgumentException("Agreement with id " + id + " doesnot exists");
 		}
 
 		Agreement existingAgreement = existingAgreementOption.get();
