@@ -3,9 +3,12 @@ package org.tmf.openapi.agreement.web;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 import static org.tmf.openapi.agreement.common.ObjectMapper.mapObjectWithExcludeFilter;
 
+import java.util.List;
+
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.querydsl.binding.QuerydslPredicate;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.json.MappingJacksonValue;
@@ -21,6 +24,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.tmf.openapi.agreement.domain.Agreement;
 import org.tmf.openapi.agreement.service.AgreementService;
+
+import com.querydsl.core.types.Predicate;
 
 @RestController
 @RequestMapping("/agreementManagement/agreement")
@@ -54,6 +59,14 @@ public class AgreementController {
 
 	}
 
+	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<MappingJacksonValue> getAgreement(@RequestParam MultiValueMap<String, String> requestParams,
+			@QuerydslPredicate(root = Agreement.class) Predicate predicate) {
+		return ResponseEntity
+				.ok(mapObjectWithExcludeFilter(populateHref(agreementService.findAgreement(predicate)), requestParams));
+
+	}
+
 	@DeleteMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<MappingJacksonValue> deleteAgreement(@PathVariable String id) {
 		agreementService.deleteAgreement(id);
@@ -64,6 +77,13 @@ public class AgreementController {
 	private Agreement populateHref(Agreement agreement) {
 		agreement.setHref(linkTo(AgreementController.class).slash(agreement.getId()).toUri());
 		return agreement;
+	}
+
+	private List<Agreement> populateHref(List<Agreement> agreements) {
+		for (Agreement agreement : agreements) {
+			populateHref(agreement);
+		}
+		return agreements;
 	}
 
 	private void validateAgreement(String id, Agreement agreement) {

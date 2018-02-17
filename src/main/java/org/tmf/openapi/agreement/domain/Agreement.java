@@ -15,6 +15,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import com.fasterxml.jackson.annotation.JsonFilter;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.querydsl.core.annotations.QueryEntity;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -25,6 +26,7 @@ import lombok.ToString;
 @Data
 @EqualsAndHashCode(of = "id")
 @ToString(includeFieldNames = true)
+@QueryEntity
 public class Agreement {
 
 	@Id

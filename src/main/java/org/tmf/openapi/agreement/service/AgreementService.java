@@ -1,7 +1,10 @@
 package org.tmf.openapi.agreement.service;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
@@ -10,6 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.tmf.openapi.agreement.domain.Agreement;
 import org.tmf.openapi.agreement.repository.AgreementRepository;
+
+import com.querydsl.core.types.Predicate;
 
 @Service
 public class AgreementService {
@@ -43,6 +48,15 @@ public class AgreementService {
 
 		Agreement existingAgreement = getExistingAgreement(id);
 		agreementRepository.delete(existingAgreement);
+	}
+
+	public List<Agreement> findAgreement(Predicate predicate) {
+
+		return toList(agreementRepository.findAll(predicate));
+	}
+
+	private <T> List<T> toList(final Iterable<T> iterable) {
+		return StreamSupport.stream(iterable.spliterator(), false).collect(Collectors.toList());
 	}
 
 	private void setDefaultAttributes(Agreement agreement) {
