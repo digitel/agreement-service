@@ -7,12 +7,14 @@ import java.util.Date;
 import java.util.List;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotEmpty;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import com.fasterxml.jackson.annotation.JsonFilter;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.querydsl.core.annotations.QueryEntity;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -23,6 +25,7 @@ import lombok.ToString;
 @Data
 @EqualsAndHashCode(of = "id")
 @ToString(includeFieldNames = true)
+@QueryEntity
 public class AgreementSpecification {
 
 	@Id
@@ -32,13 +35,14 @@ public class AgreementSpecification {
 
 	private String description;
 
-	private boolean isBundle;
+	private Boolean isBundle;
 
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = DATE_WITH_TIME_PATTERN)
 	private Date lastUpdate;
 
 	private AgreementStatus lifecycleStatus;
 
+	@NotEmpty
 	private String name;
 
 	@Valid
@@ -50,6 +54,7 @@ public class AgreementSpecification {
 
 	private List<AgreementSpecCharacteristic> specCharacteristic;
 
+	@NotEmpty
 	private List<AgreementAttachment> attachment;
 
 	private List<AgreementSpecificationRelationship> specificationRelationship;
