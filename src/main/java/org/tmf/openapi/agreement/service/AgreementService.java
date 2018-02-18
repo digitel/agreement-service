@@ -1,10 +1,10 @@
 package org.tmf.openapi.agreement.service;
 
+import static org.tmf.openapi.agreement.common.ListUtils.toList;
+
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 import org.tmf.openapi.agreement.domain.Agreement;
 import org.tmf.openapi.agreement.repository.AgreementRepository;
 
-import com.querydsl.core.types.Predicate;
+import com.querydsl.core.types.Predicate; 
 
 @Service
 public class AgreementService {
@@ -37,6 +37,11 @@ public class AgreementService {
 		return agreementRepository.findById(id).get();
 	}
 
+	public List<Agreement> findAgreement(Predicate predicate) {
+
+		return toList(agreementRepository.findAll(predicate));
+	}
+
 	public Agreement partialUpdateAgreement(Agreement agreement) {
 
 		Agreement existingAgreement = getExistingAgreement(agreement.getId());
@@ -50,14 +55,7 @@ public class AgreementService {
 		agreementRepository.delete(existingAgreement);
 	}
 
-	public List<Agreement> findAgreement(Predicate predicate) {
 
-		return toList(agreementRepository.findAll(predicate));
-	}
-
-	private <T> List<T> toList(final Iterable<T> iterable) {
-		return StreamSupport.stream(iterable.spliterator(), false).collect(Collectors.toList());
-	}
 
 	private void setDefaultAttributes(Agreement agreement) {
 		if (null == agreement.getCompletionDate()) {
